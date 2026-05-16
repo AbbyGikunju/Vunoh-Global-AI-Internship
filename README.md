@@ -36,15 +36,16 @@ A customer types a plain English request. The system:
 
 ## Project Structure
 vunoh-diaspora-assistant/
-├── app.py              # Flask routes and core logic
-├── database.py         # Database connection and initialization
-├── schema.sql          # PostgreSQL table definitions
-├── requirements.txt    # Python dependencies
-├── .env                # API keys (not committed)
+├── static/
+│   └── style.css            # Frontend styling
 ├── templates/
-│   └── index.html      # Frontend — single page application
-└── static/
-└── style.css       # Styling
+│   └── index.html           # Single Page Application frontend
+├── .env                     # Local API keys (excluded from git)
+├── app.py                   # Flask routing and core backend logic
+├── database.py              # PostgreSQL connection setup
+├── requirements.txt         # Python package dependencies
+└── schema.sql               # Database table definitions
+
 
 ---
 
