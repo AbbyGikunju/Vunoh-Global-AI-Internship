@@ -150,6 +150,47 @@ def process_request():
     whatsapp = ai_result.get("whatsapp_message", "")
     email = ai_result.get("email_message", "")
     sms = ai_result.get("sms_message", "")
+    
+    # Handle check_status specially
+    if intent == "check_status":
+        words = user_request.upper().split()
+        found_task = None
+        conn = get_db()
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        for word in words:
+            cleaned = word.strip('.,!?')
+            if cleaned.startswith("VG-"):
+                cur.execute("SELECT * FROM tasks WHERE task_code = %s", (cleaned,))
+                found_task = cur.fetchone()
+                break
+        cur.close()
+        conn.close()
+
+        if found_task:
+            status = found_task['status']
+            code = found_task['task_code']
+            intent_found = found_task['intent']
+            whatsapp = f"Hi! 👋 Here's your update:\n\nTask Code: {code}\nService: {intent_found}\nStatus: *{status}*\n\nWe'll notify you when there's a change. 🙏"
+            email = f"Dear Customer,\n\nYour task {code} for {intent_found} is currently: {status}.\n\nPlease keep your task code safe for future follow-ups.\n\nBest regards,\nVunoh Global Team"
+            sms = f"Vunoh: Task {code} status is {status}. Reply HELP for assistance."
+            steps = [
+                f"Step 1: Located task {code} in our system",
+                f"Step 2: Current status is {status}",
+                "Step 3: No further action needed at this time",
+                "Step 4: You will be notified on any status change"
+            ]
+            entities = {"task_code": code, "current_status": status, "service": intent_found}
+        else:
+            whatsapp = "Hi! 👋 Please provide your task code to check status.\n\nIt looks like: *VG-ABC1234* 🙏"
+            email = "Dear Customer,\n\nPlease provide your task code to check your request status.\n\nBest regards,\nVunoh Global Team"
+            sms = "Vunoh: Please provide your task code (e.g. VG-ABC1234) to check status."
+            steps = [
+                "Step 1: Customer requested status check",
+                "Step 2: Task code not found or not provided",
+                "Step 3: Prompt customer to provide their task code",
+                "Step 4: Look up and return status once code is provided"
+            ]
+            entities = {"task_code": "not provided", "current_status": "unknown"}
 
     risk_score, risk_reason = calculate_risk(intent, entities)
     team = assign_team(intent)

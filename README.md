@@ -1,7 +1,7 @@
 # Vunoh Diaspora Assistant
 
 An AI-powered web application that helps Kenyans living abroad initiate and 
-track services back home — money transfers, local service hires, and document 
+track services back home - money transfers, local service hires, and document 
 verification.
 
 Built for the Vunoh Global AI Internship Practical Test 2026.
@@ -108,15 +108,16 @@ Scores range from 0 to 100. Higher scores flag tasks for closer review.
 ## Decisions I Made and Why
 
 ### AI tools used
-I used Claude (claude.ai) throughout this project for code generation, 
-debugging, and architecture decisions. I reviewed and understood every line 
-before committing it. I also used Groq's LLaMA 3.3 70b model as the AI brain 
-of the application.
+I used Claude (claude.ai) as a coding assistant — it helped me when I was 
+stuck, suggested fixes, and explained concepts I was unsure about. I made 
+the architectural decisions, typed and reviewed every line of code, and 
+tested everything myself. I also used Groq's LLaMA 3.3 70b model as the 
+AI brain of the application for intent extraction and message generation.
 
 ### How I designed the system prompt
 I designed the system prompt to return a strict JSON object every time. I 
 specified exact field names, exact intent options, and told the model to return 
-nothing else — no explanation, no markdown. I included Kenyan context 
+nothing else - no explanation, no markdown. I included Kenyan context 
 instructions such as mentioning M-Pesa for money transfers and local counties 
 for locations. I excluded open-ended instructions because they produce 
 inconsistent output that is hard to parse reliably.
